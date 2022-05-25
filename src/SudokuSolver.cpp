@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <iostream>
-#include <unordered_map>
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <chrono>
 using namespace std;
 
 bool EmptyBoxes(int grid[9][9], int& row, int& col);
@@ -84,19 +87,8 @@ bool EmptyBoxes(int grid[9][9], int&row, int& col){
     return false;
 }
 
-
-int main(){
-    int grid[9][9] = {{4,0,9,2,7,0,0,0,0},
-                      {0,0,0,4,0,0,0,3,0},
-                      {0,1,6,0,8,0,0,0,7},
-                      {0,0,0,6,0,9,0,2,0},
-                      {8,0,4,5,0,1,7,6,3},
-                      {2,6,5,7,0,8,4,0,9},
-                      {1,0,0,0,6,0,0,0,0},
-                      {0,4,2,0,0,0,3,8,0},
-                      {0,0,0,8,0,0,1,0,4}};
-    if(SudokuSolver(grid)){
-        for(int i = 0; i < 9; i++){
+void printSudoku(int grid[9][9]){
+    for(int i = 0; i < 9; i++){
             for(int j = 0; j < 8; j++){
                 cout << grid[i][j]<< " | ";
             }
@@ -107,15 +99,74 @@ int main(){
             }
             cout << endl;
         }
+}
+
+void createSudoku(int grid[9][9]){
+    vector<int> arr = {1,2,3,4,5,6,7,8,9};
+    unsigned num = chrono::system_clock::now().time_since_epoch().count();
+    shuffle(arr.begin(), arr.end(), default_random_engine(num)); 
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            int k = rand() % arr.size();
+            grid[i][j] = arr.at(k);
+            arr.erase(arr.begin()+k);
+
+        }
     }
-    else{
-        cout << "not a valid sudoku" << endl;
+    arr = {1,2,3,4,5,6,7,8,9};
+    for(int i = 3; i < 6; i++){
+        for(int j = 3; j < 6; j++){
+            int k = rand() % arr.size();
+            grid[i][j] = arr.at(k);
+            arr.erase(arr.begin()+k);
+
+        }
+    }
+    arr = {1,2,3,4,5,6,7,8,9};
+    for(int i = 6; i < 9; i++){
+        for(int j = 6; j < 9; j++){
+            int k = rand() % arr.size();
+            grid[i][j] = arr.at(k);
+            arr.erase(arr.begin()+k);
+
+        }
     }
 }
 
+
+
+
+
+
+int main(){
+    int i = 1;
+    while(i == 1){
+        srand(time(NULL));
+        int grid[9][9] = {{0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,0,0}};
+        createSudoku(grid);
+        if(SudokuSolver(grid)){        
+            printSudoku(grid);
+        }
+        else{
+            cout << "not a valid sudoku" << endl;
+        }
+        cout << "Would you like to play again? 1 for yes and 0 for no." << endl;
+        cin >> i;
+    }
+}
 /*
     how should I create my own sudokus?
     Do I do the method where you create a solved sudoku puzzle (essentially same logic as solving one, u just put random numbers until it becomes solved)
-
-
+    Fill in the 3 diagonal matrices with random numbers:
+        Then we recursively add numbers until the puzzle becomes solved
+        Finally, we add a number of 0's depending on the difficulty selected.
+g
 */
