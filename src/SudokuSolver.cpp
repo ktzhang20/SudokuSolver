@@ -165,7 +165,8 @@ int main(){
                         {0,0,0,0,0,0,0,0,0},
                         {0,0,0,0,0,0,0,0,0}};
         createSudoku(grid);
-        if(SudokuSolver(grid)){       
+        if(SudokuSolver(grid)){ 
+            printSudoku(grid);      
             int arr[5]= {20,30,40,50,60}; 
             cout << "Choose your difficulty: 0-4 from easy to hard" << endl;
             int difficulty = 0;
@@ -173,6 +174,8 @@ int main(){
             difficulty = arr[difficulty];
             addBlanks(grid, difficulty);
             printSudoku(grid);
+            if(SudokuSolver(grid))
+                printSudoku(grid);
         }
         else{
             cout << "not a valid sudoku" << endl;
