@@ -133,6 +133,19 @@ void createSudoku(int grid[9][9]){
     }
 }
 
+void addBlanks(int grid[9][9], int difficulty){
+    int zeroes[9] = {0,0,0,0,0,0,0,0,0};
+    int diff = difficulty;
+    while(difficulty > 0){
+        int i = rand() % 9;
+        int j = rand() % 9;
+        if(grid[i][j] != 0 && zeroes[grid[i][j]] < ceil(diff/6)){
+            zeroes[grid[i][j]]++;
+            grid[i][j] = 0;
+            difficulty--;
+        }
+    }
+}
 
 
 
@@ -152,7 +165,13 @@ int main(){
                         {0,0,0,0,0,0,0,0,0},
                         {0,0,0,0,0,0,0,0,0}};
         createSudoku(grid);
-        if(SudokuSolver(grid)){        
+        if(SudokuSolver(grid)){       
+            int arr[5]= {20,30,40,50,60}; 
+            cout << "Choose your difficulty: 0-4 from easy to hard" << endl;
+            int difficulty = 0;
+            cin >> difficulty;
+            difficulty = arr[difficulty];
+            addBlanks(grid, difficulty);
             printSudoku(grid);
         }
         else{
@@ -163,10 +182,16 @@ int main(){
     }
 }
 /*
-    how should I create my own sudokus?
-    Do I do the method where you create a solved sudoku puzzle (essentially same logic as solving one, u just put random numbers until it becomes solved)
-    Fill in the 3 diagonal matrices with random numbers:
-        Then we recursively add numbers until the puzzle becomes solved
-        Finally, we add a number of 0's depending on the difficulty selected.
-g
+    Difficulty Scale:
+        0 Easiest - 61 squares filled in
+        1 Easy    - 51 squares filled in
+        2 Medium  - 41 squares filled in
+        3 Hard    - 31 squares filled in
+        4 Hardest - 21 squares filled in
+    Should I regulate how many squares are filled in to make it more fair? 
+        As in if I have 20 squares filled in and 9 numbers, should I make it so each number has at least 2?
+        Let's make it more fair:
+            Have an array of length 9. Increment the index if we remove a number.
+                If the index has 3 or greater, skip that index.
+                repeat until x number of squares filled in: given in input.
 */
